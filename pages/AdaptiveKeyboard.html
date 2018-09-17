@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="AdaptiBoard">
+<head >
+    <title>Adaptive Keyboard</title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+
+    <link href="../css/bootstrap.css" rel="stylesheet" />
+    <link href="../css/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="../css/mycss.css" rel="stylesheet" />
+</head>
+
+<body ng-controller="prediction_panel_controller" ng-cloak>
+    <div class="container container-top-margin">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6 text-center">
+                <img class="adapti_logo" src="../img/helping_hands.png"/>
+                <h1 class="name_header">AdaptiBoard</h1></div>
+            <div class="col-3">
+                <select class="form-control font-select" id="theme_select">
+                    <option value="1">Clean White</option>
+                    <option value="2">Blue Touch</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="container container-top-margin">
+        <div class="row align-content-center">
+            <div class="col-3">
+                <button type="button" class="btn btn-outline-warning undo element-bottom-margin" id="undo_btn" ng-click="performUndo($event)">
+                    <i class="fa fa-undo icon-padding"></i>Undo
+                </button>
+                <button type="button" class="btn btn-outline-warning redo element-left-margin element-bottom-margin" id="redo_btn" ng-click="performRedo($event)">
+                    <i class="fa fa-repeat icon-padding"></i>Redo
+                </button>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-md-3 col-7 numeric-mode-div">
+                <div class="input-group element-bottom-margin">
+                    <span class="input-group-addon" id="checkbox_span">
+                        <input id="numeric_chkbox" type="checkbox" value="">
+                    </span>
+                    <h2 class="form-control">Numeric mode</h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-8 div-border-right">
+                <div id='typing_canvas' ng-keyup="onKeyUp($event)" ng-keydown="onKeyDown($event)" contenteditable></div>
+            </div>
+            
+            <div class="col-4" id="prediction_panel">
+                <div class="card" ng-show="error_corrections.length > 0 || predictions.length > 0 || search_results.length > 0">
+                    <div class="card-header list-header" ng-show="error_corrections.length > 0">
+                        Do you mean?
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item prediction-item" id="item-{{$index + 1}}" 
+                            ng-repeat="correction in error_corrections" ng-click="predictionClickHandler($event)"
+                            ng-mouseenter="item_mouseenter($event)" ng-mouseleave="item_mouseleave($event)">
+                            {{$index + 1}} - {{correction}}
+                        </li>
+                    </ul>
+                    <div class="card-header list-header" ng-show="predictions.length > 0 || search_results.length > 0">
+                        Predictions
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item prediction-item" id="item-{{$index + error_corrections.length + 1}}"   
+                            ng-repeat="result in search_results"  ng-click="predictionClickHandler($event)"
+                            ng-mouseenter="item_mouseenter($event)" ng-mouseleave="item_mouseleave($event)">
+                            {{$index + error_corrections.length + 1}} - {{result}}
+                        </li>
+                        <li class="list-group-item prediction-item" id="item-{{$index + error_corrections.length + search_results.length + 1}}" 
+                            ng-repeat="prediction in predictions" ng-click="predictionClickHandler($event)"
+                            ng-mouseenter="item_mouseenter($event)" ng-mouseleave="item_mouseleave($event)">
+                            {{$index + error_corrections.length + search_results.length + 1}} - {{prediction}}
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-2 element-top-margin">
+                <button type="button" class="btn btn-outline-primary" id="reduce_font"><i class="fa fa-minus"></i></button>
+                <label style="display:inline-block">Font size</label>
+                <button type="button" class="btn btn-outline-primary" id="increase_font"><i class="fa fa-plus"></i></button>
+            </div>
+            <div class="col-3 element-top-margin">
+                <select class="form-control font-select" id="font_select">
+                    <option value="1">Palatino Linotype</option>
+                    <option value="2">Monotype Corsiva</option>
+                    <option value="3">Century Gothic</option>
+                </select>
+            </div>
+            <div class="col-3 div-border-right">
+                <button type="button" class="btn btn-outline-success element-top-margin float-right element-left-margin" id="save_btn">
+                    <i class="fa fa-floppy-o icon-padding"></i> Save
+                </button>
+                <button type="button" class="btn btn-outline-danger element-top-margin float-right" id="clear_btn"  data-toggle="modal" data-target="#confirm_modal">
+                    <i class="fa fa-eraser icon-padding"></i>Clear
+                </button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirm_modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Are you sure?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This will clear all the contexts in the text field!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger confirmed" data-dismiss="modal">Yes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../scripts/jquery.js"></script>
+    <script src="../scripts/popper.js"></script>
+    <script src="../scripts/tether.js"></script>
+    <script src="../scripts/bootstrap.js"></script>
+    <script src="../scripts/growl.js"></script>
+    <script src="../scripts/typo.js"></script>
+    <script src="../scripts/angular.js"></script>
+    <script src="../scripts/angular-animate.js"></script>
+    <script src="../scripts/myscript.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+﻿@font-face {
+    font-family: "Allura_new";
+    src: url(../fonts/Allura-Regular.ttf) format('truetype')
+
+}
+
+.body {
+    background: url("../img/bg_img.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+li {
+    opacity: 1;
+}
+li.ng-enter {
+    -webkit-transition: 1s;
+    transition: 1s;
+    opacity: 0;
+}
+li.ng-enter-active {
+    opacity: 1;
+}
+
+.container-top-margin {
+    margin-top: 10px;
+}
+.element-top-margin {
+    margin-top: 5px;
+}
+.element-bottom-margin {
+    margin-bottom: 5px;
+}
+.element-left-margin {
+    margin-left: 5%;
+}
+.div-border-right {
+    border-right: 1.5px solid #007bff;
+}
+#typing_canvas {
+    font-size: 2.5em;
+    max-height: 450px;
+    height: 450px;
+    overflow: auto;
+    font-family: 'Palatino Linotype';
+    border: 1px solid rgba(0,0,0,.15);
+
+}
+#checkbox_span {
+    background-color: #f0ad4e;
+    border: 1px solid #f0ad4e;
+    padding: 0.5rem 0.5rem;
+}
+#numeric_chkbox {
+    width: 20px;
+    height: 20px;
+}
+.icon-padding {
+    padding-right: 8px;
+}
+.undo, .redo {
+    color: #f0ad4e;
+    border-color: #f0ad4e;
+}
+.font-select {
+    width: 70%;
+}
+.prediction-item, .list-header {
+    padding-bottom: 6px;
+    padding-left: 23px;
+    padding-top: 6px;
+    cursor: pointer;
+}
+#prediction_panel {
+    max-height: 450px;
+    height: 450px;
+    overflow: auto;
+}
+
+
+.adapti_logo {
+    position: absolute;
+    display: block;
+    left: 50%;
+    margin: 0 auto;
+}
+.name_header {
+    padding:10px;
+}
+.highlight {
+    background-color: lightyellow;
+    zoom: 1.05;
+    font-weight: 500;
+    color: #28a745;
+}   
+
+#theme_select {
+    margin-top:10px;
+}
